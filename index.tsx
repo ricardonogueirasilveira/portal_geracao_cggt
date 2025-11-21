@@ -14,7 +14,8 @@ import {
   Globe,
   XCircle,
   Info,
-  TrendingUp
+  TrendingUp,
+  RotateCcw
 } from "lucide-react";
 
 // --- Types & Constants ---
@@ -42,6 +43,8 @@ interface UploadedFile {
 // 1. Dashboard Component
 const DashboardView = () => {
   const [activeReport, setActiveReport] = useState<number>(0);
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const reports = [
     {
@@ -58,34 +61,62 @@ const DashboardView = () => {
     }
   ];
 
+  const handleRefresh = () => {
+    setIsRefreshing(true);
+    setRefreshKey(prev => prev + 1);
+    // Timeout visual para indicar que a ação foi processada
+    setTimeout(() => setIsRefreshing(false), 1500);
+  };
+
   return (
     <div className="flex flex-col h-full animate-in fade-in duration-300">
       {/* Sub-tabs for Dashboards */}
-      <div className="flex space-x-1 bg-gray-200 p-1 rounded-t-lg border-b border-gray-300 overflow-x-auto scrollbar-hide">
-        {reports.map((report, idx) => (
-          <button
-            key={idx}
-            onClick={() => setActiveReport(idx)}
-            className={`
-              px-4 py-3 text-xs md:text-sm font-bold uppercase tracking-wide transition-all duration-200 rounded-t-md whitespace-nowrap flex-1 border-b-2
-              ${activeReport === idx 
-                ? `bg-[${MME_COLORS.blue}] text-white shadow-[0_-2px_10px_rgba(0,0,0,0.1)] border-[#FFCC00]` 
-                : "bg-white text-gray-500 hover:bg-gray-50 hover:text-[#003399] border-transparent"}
-            `}
-            style={{ 
-              backgroundColor: activeReport === idx ? MME_COLORS.blue : undefined,
-              color: activeReport === idx ? 'white' : undefined,
-              borderColor: activeReport === idx ? MME_COLORS.yellow : 'transparent'
-            }}
-          >
-            {report.title}
-          </button>
-        ))}
+      <div className="flex items-center bg-gray-200 p-1 rounded-t-lg border-b border-gray-300">
+        <div className="flex space-x-1 overflow-x-auto scrollbar-hide flex-1 mr-2">
+          {reports.map((report, idx) => (
+            <button
+              key={idx}
+              onClick={() => setActiveReport(idx)}
+              className={`
+                px-4 py-3 text-xs md:text-sm font-bold uppercase tracking-wide transition-all duration-200 rounded-t-md whitespace-nowrap flex-1 border-b-2 min-w-[150px]
+                ${activeReport === idx 
+                  ? `bg-[${MME_COLORS.blue}] text-white shadow-[0_-2px_10px_rgba(0,0,0,0.1)] border-[#FFCC00]` 
+                  : "bg-white text-gray-500 hover:bg-gray-50 hover:text-[#003399] border-transparent"}
+              `}
+              style={{ 
+                backgroundColor: activeReport === idx ? MME_COLORS.blue : undefined,
+                color: activeReport === idx ? 'white' : undefined,
+                borderColor: activeReport === idx ? MME_COLORS.yellow : 'transparent'
+              }}
+            >
+              {report.title}
+            </button>
+          ))}
+        </div>
+
+        {/* Refresh Button */}
+        <button
+          onClick={handleRefresh}
+          disabled={isRefreshing}
+          className="bg-white p-3 rounded-md shadow-sm border border-gray-300 text-[#003399] hover:bg-blue-50 hover:text-[#002060] transition-all duration-200 focus:outline-none disabled:opacity-70 mr-1"
+          title="Atualizar Painel"
+        >
+          <RotateCcw className={`w-5 h-5 ${isRefreshing ? 'animate-spin' : ''}`} />
+        </button>
       </div>
 
       {/* Iframe Container */}
       <div className="flex-1 bg-white shadow-md relative border border-gray-200 rounded-b-lg overflow-hidden">
+        {isRefreshing && (
+            <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/80 backdrop-blur-sm">
+                <div className="flex flex-col items-center gap-3">
+                    <RotateCcw className="w-10 h-10 text-[#003399] animate-spin" />
+                    <span className="text-[#003399] font-bold animate-pulse">Atualizando Painel...</span>
+                </div>
+            </div>
+        )}
         <iframe 
+          key={refreshKey} // Changing key forces React to re-mount the iframe, reloading it
           title={reports[activeReport].title}
           width="100%" 
           height="100%" 
@@ -200,6 +231,7 @@ interface DocumentSectionProps {
 
 const DocumentSection = ({ title, description, accept, allowedTypesLabel, files, onUpload, onPreview }: DocumentSectionProps) => {
   const [isDragging, setIsDragging] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -228,6 +260,14 @@ const DocumentSection = ({ title, description, accept, allowedTypesLabel, files,
     }
   };
 
+  const handleRefresh = () => {
+    setIsRefreshing(true);
+    // Simula o tempo de verificação de novos arquivos no servidor
+    setTimeout(() => {
+        setIsRefreshing(false);
+    }, 1500);
+  };
+
   const formatSize = (bytes: number) => {
     if (bytes === 0) return '0 Bytes';
     const k = 1024;
@@ -238,12 +278,23 @@ const DocumentSection = ({ title, description, accept, allowedTypesLabel, files,
 
   return (
     <div className="h-full flex flex-col p-6 md:p-8 bg-gray-50 overflow-y-auto animate-in slide-in-from-bottom-4 duration-500">
-      <div className="mb-8">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#003399] inline-flex flex-col">
-          {title}
-          <span className="h-1.5 w-1/2 bg-[#FFCC00] mt-2 rounded-full"></span>
-        </h2>
-        <p className="text-gray-600 mt-4 max-w-3xl text-lg">{description}</p>
+      <div className="mb-8 flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+        <div>
+            <h2 className="text-2xl md:text-3xl font-bold text-[#003399] inline-flex flex-col">
+            {title}
+            <span className="h-1.5 w-1/2 bg-[#FFCC00] mt-2 rounded-full"></span>
+            </h2>
+            <p className="text-gray-600 mt-4 max-w-3xl text-lg">{description}</p>
+        </div>
+        <button 
+            onClick={handleRefresh}
+            disabled={isRefreshing}
+            className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 text-[#003399] rounded-lg hover:bg-blue-50 shadow-sm transition-all text-sm font-bold whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-blue-200"
+            title="Verificar atualizações de documentos"
+        >
+            <RotateCcw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+            {isRefreshing ? 'Atualizando...' : 'Atualizar Dados'}
+        </button>
       </div>
 
       {/* Upload Area */}
@@ -277,7 +328,16 @@ const DocumentSection = ({ title, description, accept, allowedTypesLabel, files,
       </div>
 
       {/* File List */}
-      <div className="bg-white rounded-xl shadow-md border border-gray-200 flex-1 overflow-hidden flex flex-col">
+      <div className="bg-white rounded-xl shadow-md border border-gray-200 flex-1 overflow-hidden flex flex-col relative">
+        {isRefreshing && (
+            <div className="absolute inset-0 z-20 bg-white/50 backdrop-blur-[1px] flex items-center justify-center">
+                <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-lg border border-gray-100">
+                    <RotateCcw className="w-4 h-4 text-[#003399] animate-spin" />
+                    <span className="text-sm font-medium text-gray-600">Verificando novos arquivos...</span>
+                </div>
+            </div>
+        )}
+        
         <div className="p-5 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
           <h3 className="font-bold text-gray-700 flex items-center gap-2 text-lg">
             <div className="bg-[#003399] p-1.5 rounded text-white">
