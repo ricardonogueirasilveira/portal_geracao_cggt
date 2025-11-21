@@ -117,75 +117,56 @@ const PreviewModal = ({ file, onClose }: PreviewModalProps) => {
   const isDoc = file.name.endsWith('doc') || file.name.endsWith('docx');
   
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#003399] bg-opacity-40 backdrop-blur-sm p-4">
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl h-[85vh] flex flex-col animate-in zoom-in-95 duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#003399] bg-opacity-40 backdrop-blur-sm p-2 md:p-4">
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-[95vw] h-[90vh] flex flex-col animate-in zoom-in-95 duration-200">
         {/* Header */}
-        <div className="flex justify-between items-center p-4 border-b border-gray-200 bg-gray-50 rounded-t-xl">
-          <div className="flex items-center gap-3">
-             <div className={`p-2 rounded-lg ${isDoc ? 'bg-blue-100' : 'bg-green-100'}`}>
-                {isDoc ? <FileText className="text-blue-600 w-6 h-6" /> : <FileSpreadsheet className="text-green-600 w-6 h-6" />}
+        <div className="flex justify-between items-center p-3 border-b border-gray-200 bg-gray-50 rounded-t-xl">
+          <div className="flex items-center gap-3 overflow-hidden">
+             <div className={`p-2 rounded-lg shrink-0 ${isDoc ? 'bg-blue-100' : 'bg-green-100'}`}>
+                {isDoc ? <FileText className="text-blue-600 w-5 h-5" /> : <FileSpreadsheet className="text-green-600 w-5 h-5" />}
              </div>
-             <div>
-               <h3 className="font-bold text-gray-800 text-lg truncate max-w-md">{file.name}</h3>
-               <p className="text-xs text-gray-500 uppercase tracking-wider">Modo de Visualização</p>
+             <div className="min-w-0">
+               <h3 className="font-bold text-gray-800 text-base md:text-lg truncate">{file.name}</h3>
+               <p className="text-xs text-gray-500 uppercase tracking-wider hidden sm:block">Modo de Visualização</p>
              </div>
           </div>
-          <button onClick={onClose} className="text-gray-400 hover:text-red-500 transition-colors p-1 hover:bg-red-50 rounded-full">
+          <button onClick={onClose} className="text-gray-400 hover:text-red-500 transition-colors p-1 hover:bg-red-50 rounded-full shrink-0">
             <XCircle className="w-8 h-8" />
           </button>
         </div>
 
-        {/* Body */}
-        <div className="flex-1 bg-slate-100 p-8 overflow-y-auto flex flex-col items-center justify-center text-center relative">
-            <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.gov.br/mme/++theme++mme.theme/assets/img/logo-mme.png')] bg-center bg-no-repeat bg-contain"></div>
-            
-            {/* Simulation Card */}
-            <div className="bg-white p-12 rounded-2xl shadow-xl max-w-lg w-full border border-gray-200 z-10">
-                <div className="mb-8 flex justify-center">
-                    <div className={`rounded-full p-6 ${isDoc ? 'bg-blue-50' : 'bg-green-50'}`}>
-                        {isDoc ? (
-                            <FileText className="w-20 h-20 text-blue-400" />
-                        ) : (
-                            <FileSpreadsheet className="w-20 h-20 text-green-400" />
-                        )}
-                    </div>
-                </div>
-                <h4 className="text-xl font-bold text-gray-800 mb-2">Pré-visualização do Arquivo</h4>
-                <p className="text-gray-600 mb-8 leading-relaxed">
-                    O arquivo <strong>{file.name}</strong> está disponível. 
-                    Para visualizar os dados completos, clique no botão abaixo para acessar/baixar.
-                </p>
-                
-                <div className="flex flex-col gap-3">
-                    <a 
-                        href={file.url} 
-                        download={file.name}
-                        target={file.url.startsWith('http') && file.url !== '#' ? "_blank" : undefined}
-                        rel="noopener noreferrer"
-                        className="bg-[#003399] hover:bg-[#002060] text-white px-8 py-4 rounded-xl font-bold transition-all transform hover:scale-[1.02] shadow-lg hover:shadow-xl flex items-center justify-center gap-3"
-                        onClick={(e) => {
-                          if (file.url === '#') {
-                            e.preventDefault();
-                            alert("Link pendente: Cole o link do OneDrive no código (index.tsx).");
-                          }
-                        }}
-                    >
-                        <Download className="w-5 h-5" />
-                        Acessar Arquivo Original
+        {/* Body - Iframe Viewer */}
+        <div className="flex-1 bg-gray-100 relative overflow-hidden">
+            <iframe 
+              src={file.url}
+              title={file.name}
+              className="w-full h-full"
+              frameBorder="0"
+              allowFullScreen
+            >
+                <div className="flex flex-col items-center justify-center h-full p-4 text-center">
+                    <p className="mb-4 text-gray-600">Seu navegador não suporta visualização direta.</p>
+                    <a href={file.url} target="_blank" rel="noreferrer" className="bg-[#003399] text-white px-4 py-2 rounded hover:bg-blue-800">
+                        Abrir Arquivo
                     </a>
-                    <button 
-                        onClick={onClose}
-                        className="text-gray-500 hover:text-gray-700 font-medium text-sm mt-2 hover:underline"
-                    >
-                        Fechar visualização
-                    </button>
                 </div>
-            </div>
+            </iframe>
         </div>
 
         {/* Footer */}
-        <div className="p-3 border-t border-gray-200 bg-gray-50 text-center md:text-right text-xs text-gray-400 rounded-b-xl">
-            CGGT - Sistema de Visualização Seguro
+        <div className="p-2 border-t border-gray-200 bg-gray-50 flex justify-between items-center rounded-b-xl text-xs md:text-sm">
+            <span className="text-gray-500 hidden md:inline">CGGT - Sistema de Visualização Seguro</span>
+            <div className="flex gap-4 ml-auto">
+                <a 
+                    href={file.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-[#003399] hover:text-[#002060] font-medium hover:underline"
+                >
+                    <Download className="w-4 h-4" />
+                    Abrir no SharePoint / Baixar
+                </a>
+            </div>
         </div>
       </div>
     </div>
