@@ -499,12 +499,12 @@ const App = () => {
 
         {/* Sidebar Footer */}
         <div className="p-6 bg-[#002570]">
-            <div className="flex items-center gap-3 mb-3 opacity-80">
-                <Info className="w-4 h-4 text-[#FFCC00]" />
-                <span className="text-xs text-blue-100">Precisa de ajuda?</span>
-            </div>
-            <div className="text-[10px] text-center text-blue-300 border-t border-blue-700 pt-3">
-            &copy; 2025 Ministério de Minas e Energia
+            <div className="text-[10px] text-center text-blue-300 pt-3 flex flex-col gap-2">
+                <span>&copy; 2025 Ministério de Minas e Energia</span>
+                <div className="pt-2 border-t border-blue-800/50">
+                    <p className="font-medium text-blue-200">Elaborado por: Ricardo Nogueira Silveira</p>
+                    <p className="text-blue-400 mt-0.5">Coordenador de Expansão da Oferta de Geração - CGGT/DPME/MME</p>
+                </div>
             </div>
         </div>
       </aside>
@@ -530,16 +530,7 @@ const App = () => {
                     </h2>
                 </div>
 
-                {/* User Profile Placeholder */}
-                <div className="hidden md:flex items-center gap-4 pl-6 border-l border-gray-200 ml-6">
-                    <div className="text-right">
-                        <div className="text-sm font-bold text-gray-700">Usuário Convidado</div>
-                        <div className="text-xs text-gray-500">Acesso Público</div>
-                    </div>
-                    <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#003399] to-[#0055CC] text-white flex items-center justify-center font-bold border-2 border-white shadow-md">
-                        CG
-                    </div>
-                </div>
+                {/* User Profile Removed */}
             </div>
             <div className="h-1.5 bg-gradient-to-r from-[#003399] via-[#0055CC] to-[#FFCC00]"></div>
         </header>
