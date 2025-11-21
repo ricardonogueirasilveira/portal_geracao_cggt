@@ -13,7 +13,8 @@ import {
   BarChart3,
   Globe,
   XCircle,
-  Info
+  Info,
+  TrendingUp
 } from "lucide-react";
 
 // --- Types & Constants ---
@@ -25,7 +26,7 @@ const MME_COLORS = {
   lightGray: "#f3f4f6",
 };
 
-type TabId = "dashboards" | "monitoring" | "bulletin" | "site_dates";
+type TabId = "dashboards" | "monitoring" | "pac_generation" | "bulletin" | "site_dates";
 
 interface UploadedFile {
   id: string;
@@ -378,6 +379,17 @@ const App = () => {
         date: new Date()
       }
     ],
+    pac_generation: [
+      // Pre-loaded file for PAC Generation
+      {
+        id: "preloaded-pac-generation",
+        name: "Planilha PAC Geração.xlsx",
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        size: 4100000, // ~4.1 MB simulated size
+        url: "https://mmegovbr-my.sharepoint.com/:f:/g/personal/ricardo_silveira_mme_gov_br/IgA3d8GnFnwBT72l3pj3c95wAYLfH6UO7-iiSWSL5vk41WA?e=SRdMcb",
+        date: new Date()
+      }
+    ],
     bulletin: [
       {
         id: "preloaded-bulletin-excel",
@@ -428,6 +440,11 @@ const App = () => {
       icon: <BarChart3 className="w-5 h-5" /> 
     },
     { 
+      id: "pac_generation", 
+      label: "Planilha PAC Geração", 
+      icon: <FileSpreadsheet className="w-5 h-5" /> 
+    },
+    { 
       id: "bulletin", 
       label: "Boletim do Sistema Elétrico - Geração", 
       icon: <FileText className="w-5 h-5" /> 
@@ -452,6 +469,18 @@ const App = () => {
             allowedTypesLabel="Excel (.xlsx), Excel Binário (.xlsb)"
             files={storedFiles.monitoring}
             onUpload={(files) => handleUpload("monitoring", files)}
+            onPreview={setPreviewFile}
+          />
+        );
+      case "pac_generation":
+        return (
+          <DocumentSection 
+            title="Planilha PAC Geração" 
+            description="Faça upload da Planilha PAC Geração para acompanhamento da equipe e do Ministério."
+            accept=".xlsx, .xlsb, .xls"
+            allowedTypesLabel="Excel (.xlsx), Excel Binário (.xlsb)"
+            files={storedFiles.pac_generation}
+            onUpload={(files) => handleUpload("pac_generation", files)}
             onPreview={setPreviewFile}
           />
         );
