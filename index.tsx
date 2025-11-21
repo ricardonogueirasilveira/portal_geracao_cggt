@@ -367,8 +367,35 @@ const App = () => {
   
   // State for storing files per tab to ensure persistence
   const [storedFiles, setStoredFiles] = useState<Record<string, UploadedFile[]>>({
-    monitoring: [],
-    bulletin: [],
+    monitoring: [
+      // Pre-loaded file for Monitoring
+      {
+        id: "preloaded-monitoring",
+        name: "Planilha de Monitoramento da Geração.xlsx",
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        size: 5200000, // ~5.2 MB simulated size
+        url: "https://mmegovbr-my.sharepoint.com/:f:/g/personal/ricardo_silveira_mme_gov_br/IgCmqwPngAqSTJisFmQnGydfASajYjOCnCRJqTKe8U_a-yc?e=HE7Wo5", 
+        date: new Date()
+      }
+    ],
+    bulletin: [
+      {
+        id: "preloaded-bulletin-excel",
+        name: "Boletim do Sistema Elétrico - Geração.xlsx",
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        size: 3500000,
+        url: "https://mmegovbr-my.sharepoint.com/:f:/g/personal/ricardo_silveira_mme_gov_br/IgBaDcX03NWVTIJfK2c-1fI0AU_CnjBhKuoz5rrfjRsUg2M?e=l3PbWs",
+        date: new Date()
+      },
+      {
+        id: "preloaded-bulletin-doc",
+        name: "Relatório Técnico - Boletim Geração.docx",
+        type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        size: 1200000,
+        url: "https://mmegovbr-my.sharepoint.com/:f:/g/personal/ricardo_silveira_mme_gov_br/IgBaDcX03NWVTIJfK2c-1fI0AU_CnjBhKuoz5rrfjRsUg2M?e=l3PbWs",
+        date: new Date()
+      }
+    ],
     site_dates: [
       // Pre-loaded file placeholder for OneDrive
       {
@@ -376,9 +403,7 @@ const App = () => {
         name: "312 reunião CMSE- Novembro 25.xlsx",
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         size: 2450000, // ~2.45 MB simulated size
-        // AQUI: Substitua o '#' pelo Link de Compartilhamento (Share Link) do seu OneDrive
-        // Exemplo: "https://onedrive.live.com/redir?resid=..."
-        url: "#", 
+        url: "https://mmegovbr-my.sharepoint.com/:f:/g/personal/ricardo_silveira_mme_gov_br/IgD4Gm93r99xQYcqtLvznEcKAbbdRBdb_DFc1jVOWJ8uFEw?e=kbIgiL", 
         date: new Date() 
       }
     ]
@@ -562,4 +587,25 @@ const App = () => {
       
       {/* Overlay for mobile menu */}
       {mobileMenuOpen && (
-        
+        <div 
+          className="fixed inset-0 bg-[#003399]/50 backdrop-blur-sm z-20 md:hidden transition-opacity"
+          onClick={() => setMobileMenuOpen(false)}
+        ></div>
+      )}
+
+      {/* Preview Modal */}
+      {previewFile && (
+        <PreviewModal 
+          file={previewFile} 
+          onClose={() => setPreviewFile(null)} 
+        />
+      )}
+    </div>
+  );
+};
+
+const container = document.getElementById("root");
+if (container) {
+  const root = createRoot(container);
+  root.render(<App />);
+}
