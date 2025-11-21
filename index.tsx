@@ -43,8 +43,8 @@ interface UploadedFile {
 // 1. Dashboard Component
 const DashboardView = () => {
   const [activeReport, setActiveReport] = useState<number>(0);
-  const [refreshKey, setRefreshKey] = useState(0);
-  const [isRefreshing, setIsRefreshing] = useState(false);
+  
+  // Removed refresh logic as requested
 
   const reports = [
     {
@@ -60,13 +60,6 @@ const DashboardView = () => {
       url: "https://app.powerbi.com/view?r=eyJrIjoiMWU2ZTI4YWQtZjhkMS00ODNiLWE0MWMtYTkyMDAxMDk0NDM5IiwidCI6IjVlMzk3OGI5LTQ5NTAtNDM3Yy04N2I2LTQ5MmYxMjY4ZGVjOCJ9&pageName=185dfa9a7b011860d5d0"
     }
   ];
-
-  const handleRefresh = () => {
-    setIsRefreshing(true);
-    setRefreshKey(prev => prev + 1);
-    // Timeout visual para indicar que a ação foi processada
-    setTimeout(() => setIsRefreshing(false), 1500);
-  };
 
   return (
     <div className="flex flex-col h-full animate-in fade-in duration-300">
@@ -93,30 +86,11 @@ const DashboardView = () => {
             </button>
           ))}
         </div>
-
-        {/* Refresh Button */}
-        <button
-          onClick={handleRefresh}
-          disabled={isRefreshing}
-          className="bg-white p-3 rounded-md shadow-sm border border-gray-300 text-[#003399] hover:bg-blue-50 hover:text-[#002060] transition-all duration-200 focus:outline-none disabled:opacity-70 mr-1"
-          title="Atualizar Painel"
-        >
-          <RotateCcw className={`w-5 h-5 ${isRefreshing ? 'animate-spin' : ''}`} />
-        </button>
       </div>
 
       {/* Iframe Container */}
       <div className="flex-1 bg-white shadow-md relative border border-gray-200 rounded-b-lg overflow-hidden">
-        {isRefreshing && (
-            <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/80 backdrop-blur-sm">
-                <div className="flex flex-col items-center gap-3">
-                    <RotateCcw className="w-10 h-10 text-[#003399] animate-spin" />
-                    <span className="text-[#003399] font-bold animate-pulse">Atualizando Painel...</span>
-                </div>
-            </div>
-        )}
         <iframe 
-          key={refreshKey} // Changing key forces React to re-mount the iframe, reloading it
           title={reports[activeReport].title}
           width="100%" 
           height="100%" 
@@ -222,43 +196,12 @@ const PreviewModal = ({ file, onClose }: PreviewModalProps) => {
 interface DocumentSectionProps {
   title: string;
   description: string;
-  accept: string;
-  allowedTypesLabel: string;
   files: UploadedFile[];
-  onUpload: (files: UploadedFile[]) => void;
   onPreview: (file: UploadedFile) => void;
 }
 
-const DocumentSection = ({ title, description, accept, allowedTypesLabel, files, onUpload, onPreview }: DocumentSectionProps) => {
-  const [isDragging, setIsDragging] = useState(false);
+const DocumentSection = ({ title, description, files, onPreview }: DocumentSectionProps) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      processFiles(Array.from(e.target.files));
-    }
-  };
-
-  const processFiles = (newFiles: File[]) => {
-    const processed: UploadedFile[] = newFiles.map(file => ({
-      id: Math.random().toString(36).substr(2, 9),
-      name: file.name,
-      type: file.type,
-      size: file.size,
-      url: URL.createObjectURL(file),
-      date: new Date()
-    }));
-    onUpload(processed);
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(false);
-    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      processFiles(Array.from(e.dataTransfer.files));
-    }
-  };
 
   const handleRefresh = () => {
     setIsRefreshing(true);
@@ -297,35 +240,7 @@ const DocumentSection = ({ title, description, accept, allowedTypesLabel, files,
         </button>
       </div>
 
-      {/* Upload Area */}
-      <div 
-        className={`
-          border-2 border-dashed rounded-2xl p-12 text-center cursor-pointer transition-all duration-300 mb-8 group
-          ${isDragging 
-            ? 'border-[#FFCC00] bg-yellow-50 scale-[1.01] shadow-lg' 
-            : 'border-gray-300 bg-white hover:border-[#003399] hover:bg-blue-50/30'}
-        `}
-        onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
-        onDragLeave={() => setIsDragging(false)}
-        onDrop={handleDrop}
-        onClick={() => fileInputRef.current?.click()}
-      >
-        <input 
-          type="file" 
-          ref={fileInputRef} 
-          className="hidden" 
-          accept={accept} 
-          multiple 
-          onChange={handleFileSelect}
-        />
-        <div className="flex justify-center mb-6">
-          <div className="bg-blue-50 p-5 rounded-full group-hover:bg-[#003399] transition-colors duration-300">
-            <Upload className="w-10 h-10 text-[#003399] group-hover:text-[#FFCC00] transition-colors duration-300" />
-          </div>
-        </div>
-        <h3 className="text-xl font-bold text-gray-800 mb-2">Clique ou arraste arquivos aqui</h3>
-        <p className="text-gray-500">Formatos suportados: <span className="font-medium text-[#003399]">{allowedTypesLabel}</span></p>
-      </div>
+      {/* Upload Area Removed */}
 
       {/* File List */}
       <div className="bg-white rounded-xl shadow-md border border-gray-200 flex-1 overflow-hidden flex flex-col relative">
@@ -351,8 +266,7 @@ const DocumentSection = ({ title, description, accept, allowedTypesLabel, files,
           {files.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-64 text-gray-400 bg-gray-50/50">
               <FileSpreadsheet className="w-16 h-16 mb-4 opacity-20" />
-              <p className="text-lg font-medium">Nenhum arquivo enviado ainda.</p>
-              <p className="text-sm">Utilize a área acima para adicionar documentos.</p>
+              <p className="text-lg font-medium">Nenhum arquivo disponível.</p>
             </div>
           ) : (
             <table className="w-full text-left border-collapse">
@@ -427,7 +341,7 @@ const App = () => {
   const [previewFile, setPreviewFile] = useState<UploadedFile | null>(null);
   
   // State for storing files per tab to ensure persistence
-  const [storedFiles, setStoredFiles] = useState<Record<string, UploadedFile[]>>({
+  const [storedFiles] = useState<Record<string, UploadedFile[]>>({
     monitoring: [
       // Pre-loaded file for Monitoring
       {
@@ -472,7 +386,7 @@ const App = () => {
       // Pre-loaded file placeholder for OneDrive
       {
         id: "preloaded-cmse",
-        name: "312 reunião CMSE- Novembro 25.xlsx",
+        name: "Datas de Tendência.xlsx",
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         size: 2450000, // ~2.45 MB simulated size
         url: "https://mmegovbr-my.sharepoint.com/:f:/g/personal/ricardo_silveira_mme_gov_br/IgD4Gm93r99xQYcqtLvznEcKAbbdRBdb_DFc1jVOWJ8uFEw?e=kbIgiL", 
@@ -480,13 +394,6 @@ const App = () => {
       }
     ]
   });
-
-  const handleUpload = (tabId: string, newFiles: UploadedFile[]) => {
-    setStoredFiles(prev => ({
-      ...prev,
-      [tabId]: [...prev[tabId], ...newFiles]
-    }));
-  };
 
   const menuItems = [
     { 
@@ -524,11 +431,8 @@ const App = () => {
         return (
           <DocumentSection 
             title="Monitoramento da Geração" 
-            description="Faça upload da planilha de monitoramento (Excel ou Binário) para disponibilização à equipe e ao Ministério."
-            accept=".xlsx, .xlsb, .xls"
-            allowedTypesLabel="Excel (.xlsx), Excel Binário (.xlsb)"
+            description="Acesse abaixo a planilha de monitoramento da geração (Excel ou Binário)."
             files={storedFiles.monitoring}
-            onUpload={(files) => handleUpload("monitoring", files)}
             onPreview={setPreviewFile}
           />
         );
@@ -536,11 +440,8 @@ const App = () => {
         return (
           <DocumentSection 
             title="Planilha PAC Geração" 
-            description="Faça upload da Planilha PAC Geração para acompanhamento da equipe e do Ministério."
-            accept=".xlsx, .xlsb, .xls"
-            allowedTypesLabel="Excel (.xlsx), Excel Binário (.xlsb)"
+            description="Consulte a Planilha PAC Geração para acompanhamento da equipe e do Ministério."
             files={storedFiles.pac_generation}
-            onUpload={(files) => handleUpload("pac_generation", files)}
             onPreview={setPreviewFile}
           />
         );
@@ -548,11 +449,8 @@ const App = () => {
         return (
           <DocumentSection 
             title="Boletim do Sistema Elétrico" 
-            description="Faça upload do boletim em formato Excel e do relatório em Word."
-            accept=".xlsx, .xlsb, .xls, .doc, .docx"
-            allowedTypesLabel="Excel (.xlsx, .xlsb) e Word (.docx)"
+            description="Área destinada aos arquivos do boletim em formato Excel e relatório técnico em Word."
             files={storedFiles.bulletin}
-            onUpload={(files) => handleUpload("bulletin", files)}
             onPreview={setPreviewFile}
           />
         );
@@ -560,11 +458,8 @@ const App = () => {
         return (
           <DocumentSection 
             title="Datas de Tendência (Site MME)" 
-            description="Faça upload da planilha de datas de tendência para atualização do portal."
-            accept=".xlsx, .xlsb, .xls"
-            allowedTypesLabel="Excel (.xlsx, .xlsb)"
+            description="Consulte a planilha de datas de tendência atualizada."
             files={storedFiles.site_dates}
-            onUpload={(files) => handleUpload("site_dates", files)}
             onPreview={setPreviewFile}
           />
         );
