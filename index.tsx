@@ -146,18 +146,26 @@ const PreviewModal = ({ file, onClose }: PreviewModalProps) => {
                 </div>
                 <h4 className="text-xl font-bold text-gray-800 mb-2">Pré-visualização do Arquivo</h4>
                 <p className="text-gray-600 mb-8 leading-relaxed">
-                    O arquivo <strong>{file.name}</strong> foi carregado com sucesso no Portal CGGT. 
-                    Para visualizar os dados completos ou editar, faça o download da versão original.
+                    O arquivo <strong>{file.name}</strong> está disponível. 
+                    Para visualizar os dados completos, clique no botão abaixo para acessar/baixar.
                 </p>
                 
                 <div className="flex flex-col gap-3">
                     <a 
                         href={file.url} 
                         download={file.name}
+                        target={file.url.startsWith('http') && file.url !== '#' ? "_blank" : undefined}
+                        rel="noopener noreferrer"
                         className="bg-[#003399] hover:bg-[#002060] text-white px-8 py-4 rounded-xl font-bold transition-all transform hover:scale-[1.02] shadow-lg hover:shadow-xl flex items-center justify-center gap-3"
+                        onClick={(e) => {
+                          if (file.url === '#') {
+                            e.preventDefault();
+                            alert("Link pendente: Cole o link do OneDrive no código (index.tsx).");
+                          }
+                        }}
                     >
                         <Download className="w-5 h-5" />
-                        Baixar Arquivo Original
+                        Acessar Arquivo Original
                     </a>
                     <button 
                         onClick={onClose}
@@ -256,6 +264,7 @@ const DocumentSection = ({ title, description, accept, allowedTypesLabel, files,
           className="hidden" 
           accept={accept} 
           multiple 
+          onChange={handleFileSelect}
         />
         <div className="flex justify-center mb-6">
           <div className="bg-blue-50 p-5 rounded-full group-hover:bg-[#003399] transition-colors duration-300">
@@ -323,7 +332,15 @@ const DocumentSection = ({ title, description, accept, allowedTypesLabel, files,
                         <a 
                           href={file.url} 
                           download={file.name}
+                          target={file.url.startsWith('http') && file.url !== '#' ? "_blank" : undefined}
+                          rel="noopener noreferrer"
                           className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-[#FFCC00] hover:text-[#003399] rounded-lg transition-all shadow-sm hover:shadow-md"
+                          onClick={(e) => {
+                            if (file.url === '#') {
+                              e.preventDefault();
+                              alert("Link pendente: Adicione o link do OneDrive no código.");
+                            }
+                          }}
                         >
                           <Download className="w-4 h-4" />
                           <span className="hidden lg:inline">Baixar</span>
@@ -352,7 +369,19 @@ const App = () => {
   const [storedFiles, setStoredFiles] = useState<Record<string, UploadedFile[]>>({
     monitoring: [],
     bulletin: [],
-    site_dates: []
+    site_dates: [
+      // Pre-loaded file placeholder for OneDrive
+      {
+        id: "preloaded-cmse",
+        name: "312 reunião CMSE- Novembro 25.xlsx",
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        size: 2450000, // ~2.45 MB simulated size
+        // AQUI: Substitua o '#' pelo Link de Compartilhamento (Share Link) do seu OneDrive
+        // Exemplo: "https://onedrive.live.com/redir?resid=..."
+        url: "#", 
+        date: new Date() 
+      }
+    ]
   });
 
   const handleUpload = (tabId: string, newFiles: UploadedFile[]) => {
@@ -533,25 +562,4 @@ const App = () => {
       
       {/* Overlay for mobile menu */}
       {mobileMenuOpen && (
-        <div 
-          className="fixed inset-0 bg-[#003399]/50 backdrop-blur-sm z-20 md:hidden transition-opacity"
-          onClick={() => setMobileMenuOpen(false)}
-        ></div>
-      )}
-
-      {/* Preview Modal */}
-      {previewFile && (
-        <PreviewModal 
-          file={previewFile} 
-          onClose={() => setPreviewFile(null)} 
-        />
-      )}
-    </div>
-  );
-};
-
-const container = document.getElementById("root");
-if (container) {
-  const root = createRoot(container);
-  root.render(<App />);
-}
+        
