@@ -1,0 +1,21 @@
+{
+  "name": "Portal de Expansão da Geração",
+  "short_name": "Portal CGGT",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f3f4f6",
+  "theme_color": "#003399",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/9318/9318538.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/9318/9318538.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
