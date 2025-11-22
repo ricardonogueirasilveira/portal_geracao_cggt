@@ -416,7 +416,7 @@ const App = () => {
         <div className="p-6 bg-[#002060] border-b border-blue-800 flex flex-col items-start gap-1">
             {/* MME/DPME Box */}
             <div className="bg-white rounded w-auto px-2 py-0.5 h-6 flex items-center justify-center shadow-md mb-1">
-                <div className="text-[#003399] font-black text-xs leading-none text-center tracking-tight">MME/DPME</div>
+                <div className="text-[#003399] font-black text-xs leading-none text-center tracking-tight">SNEE/DPME</div>
             </div>
             {/* Portal Text */}
             <div className="leading-tight">
@@ -456,7 +456,7 @@ const App = () => {
                 <span>&copy; 2025 Ministério de Minas e Energia</span>
                 <div className="pt-2 border-t border-blue-800/50">
                     <p className="font-medium text-blue-200">Elaborado por: Ricardo Nogueira Silveira</p>
-                    <p className="text-blue-400 mt-0.5">Coordenador de Expansão da Oferta de Geração - CGGT/DPME/MME</p>
+                    <p className="text-blue-400 mt-0.5">Coordenador de Expansão de Geração de Energia Elétrica - CGGT/DPME/SNEE/MME</p>
                 </div>
             </div>
         </div>
@@ -476,10 +476,10 @@ const App = () => {
                 
                 <div className="flex flex-col w-full md:w-auto ml-3 md:ml-0">
                     <span className="text-[#003399] font-bold text-[9px] md:text-xs uppercase tracking-wider mb-1 md:mb-0 leading-tight">
-                      Secretaria Nacional de Energia Elétrica - Coordenação-Geral de Expansão da Geração e da Transmissão de Energia Elétrica
+                      Secretaria Nacional de Energia Elétrica - Departamento de Políticas para o Mercado - Coordenação-Geral de Expansão da Geração e da Transmissão de Energia Elétrica
                     </span>
                     <h2 className="text-lg md:text-2xl font-extrabold text-gray-800 leading-tight">
-                        Portal de Painéis, Planilhas, Documentos e Relatório da Expansão <span className="text-gray-400 mx-1 hidden md:inline">|</span> <span className="text-[#003399] block md:inline mt-1 md:mt-0">- CGGT/DPME/SNEE/MME</span>
+                        Portal de Painéis, Planilhas, Documentos e Relatórios da Expansão da Geração <span className="text-gray-400 mx-1 hidden md:inline">|</span> <span className="text-[#003399] block md:inline mt-1 md:mt-0">- CGGT/DPME/SNEE/MME</span>
                     </h2>
                 </div>
 
