@@ -6,15 +6,11 @@ import {
   FileText, 
   Upload, 
   Download, 
-  Eye, 
   Menu,
   X,
   ChevronRight,
   BarChart3,
   Globe,
-  XCircle,
-  Info,
-  TrendingUp,
   RotateCcw
 } from "lucide-react";
 
@@ -27,7 +23,7 @@ const MME_COLORS = {
   lightGray: "#f3f4f6",
 };
 
-type TabId = "dashboards" | "monitoring" | "pac_generation" | "bulletin" | "site_dates";
+type TabId = "dashboards" | "monitoring" | "pac_generation" | "bulletin" | "briefings" | "site_dates";
 
 interface UploadedFile {
   id: string;
@@ -105,83 +101,14 @@ const DashboardView = () => {
   );
 };
 
-// 2. Preview Modal Component
-interface PreviewModalProps {
-  file: UploadedFile | null;
-  onClose: () => void;
-}
-
-const PreviewModal = ({ file, onClose }: PreviewModalProps) => {
-  if (!file) return null;
-
-  const isDoc = file.name.endsWith('doc') || file.name.endsWith('docx');
-  
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#003399] bg-opacity-40 backdrop-blur-sm p-2 md:p-4">
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-[95vw] h-[90vh] flex flex-col animate-in zoom-in-95 duration-200">
-        {/* Header */}
-        <div className="flex justify-between items-center p-3 border-b border-gray-200 bg-gray-50 rounded-t-xl">
-          <div className="flex items-center gap-3 overflow-hidden">
-             <div className={`p-2 rounded-lg shrink-0 ${isDoc ? 'bg-blue-100' : 'bg-green-100'}`}>
-                {isDoc ? <FileText className="text-blue-600 w-5 h-5" /> : <FileSpreadsheet className="text-green-600 w-5 h-5" />}
-             </div>
-             <div className="min-w-0">
-               <h3 className="font-bold text-gray-800 text-base md:text-lg truncate">{file.name}</h3>
-               <p className="text-xs text-gray-500 uppercase tracking-wider hidden sm:block">Modo de Visualização</p>
-             </div>
-          </div>
-          <button onClick={onClose} className="text-gray-400 hover:text-red-500 transition-colors p-1 hover:bg-red-50 rounded-full shrink-0">
-            <XCircle className="w-8 h-8" />
-          </button>
-        </div>
-
-        {/* Body - Iframe Viewer */}
-        <div className="flex-1 bg-gray-100 relative overflow-hidden">
-            <iframe 
-              src={file.url}
-              title={file.name}
-              className="w-full h-full"
-              frameBorder="0"
-              allowFullScreen
-            >
-                <div className="flex flex-col items-center justify-center h-full p-4 text-center">
-                    <p className="mb-4 text-gray-600">Seu navegador não suporta visualização direta.</p>
-                    <a href={file.url} target="_blank" rel="noreferrer" className="bg-[#003399] text-white px-4 py-2 rounded hover:bg-blue-800">
-                        Abrir Arquivo
-                    </a>
-                </div>
-            </iframe>
-        </div>
-
-        {/* Footer */}
-        <div className="p-2 border-t border-gray-200 bg-gray-50 flex justify-between items-center rounded-b-xl text-xs md:text-sm">
-            <span className="text-gray-500 hidden md:inline">CGGT - Sistema de Visualização Seguro</span>
-            <div className="flex gap-4 ml-auto">
-                <a 
-                    href={file.url} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-[#003399] hover:text-[#002060] font-medium hover:underline"
-                >
-                    <Download className="w-4 h-4" />
-                    Abrir no SharePoint / Baixar
-                </a>
-            </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// 3. Generic Document Repository Component
+// 2. Generic Document Repository Component
 interface DocumentSectionProps {
   title: string;
-  description: string;
+  description: React.ReactNode;
   files: UploadedFile[];
-  onPreview: (file: UploadedFile) => void;
 }
 
-const DocumentSection = ({ title, description, files, onPreview }: DocumentSectionProps) => {
+const DocumentSection = ({ title, description, files }: DocumentSectionProps) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const handleRefresh = () => {
@@ -208,7 +135,7 @@ const DocumentSection = ({ title, description, files, onPreview }: DocumentSecti
             {title}
             <span className="h-1.5 w-1/2 bg-[#FFCC00] mt-2 rounded-full"></span>
             </h2>
-            <p className="text-gray-600 mt-4 max-w-3xl text-lg">{description}</p>
+            <div className="text-gray-600 mt-4 max-w-3xl text-lg">{description}</div>
         </div>
         <button 
             onClick={handleRefresh}
@@ -278,13 +205,6 @@ const DocumentSection = ({ title, description, files, onPreview }: DocumentSecti
                     <td className="p-4 text-gray-500 text-sm font-mono hidden sm:table-cell">{formatSize(file.size)}</td>
                     <td className="p-4 text-right">
                       <div className="flex justify-end gap-2">
-                        <button 
-                          onClick={() => onPreview(file)}
-                          className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-[#003399] bg-blue-50 hover:bg-[#003399] hover:text-white rounded-lg transition-all shadow-sm hover:shadow-md"
-                        >
-                          <Eye className="w-4 h-4" />
-                          <span className="hidden lg:inline">Visualizar</span>
-                        </button>
                         <a 
                           href={file.url} 
                           download={file.name}
@@ -319,7 +239,6 @@ const DocumentSection = ({ title, description, files, onPreview }: DocumentSecti
 const App = () => {
   const [activeTab, setActiveTab] = useState<TabId>("dashboards");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [previewFile, setPreviewFile] = useState<UploadedFile | null>(null);
   
   // State for storing files per tab to ensure persistence
   const [storedFiles] = useState<Record<string, UploadedFile[]>>({
@@ -330,7 +249,7 @@ const App = () => {
         name: "Planilha de Monitoramento da Geração.xlsx",
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         size: 5200000, // ~5.2 MB simulated size
-        url: "https://mmegovbr-my.sharepoint.com/:f:/g/personal/ricardo_silveira_mme_gov_br/IgCmqwPngAqSTJisFmQnGydfASajYjOCnCRJqTKe8U_a-yc?e=HE7Wo5", 
+        url: "https://mmegovbr-my.sharepoint.com/:f:/g/personal/ricardo_silveira_mme_gov_br/IgCmqwPngAqSTJisFmQnGydfASajYjOCnCRJqTKe8U_a-yc?e=HE7Wo5&SortField=Modified&SortDir=Desc", 
         date: new Date()
       }
     ],
@@ -341,25 +260,27 @@ const App = () => {
         name: "Planilha PAC Geração.xlsx",
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         size: 4100000, // ~4.1 MB simulated size
-        url: "https://mmegovbr-my.sharepoint.com/:f:/g/personal/ricardo_silveira_mme_gov_br/IgA3d8GnFnwBT72l3pj3c95wAYLfH6UO7-iiSWSL5vk41WA?e=SRdMcb",
+        url: "https://mmegovbr-my.sharepoint.com/:f:/g/personal/ricardo_silveira_mme_gov_br/IgA3d8GnFnwBT72l3pj3c95wAYLfH6UO7-iiSWSL5vk41WA?e=SRdMcb&SortField=Modified&SortDir=Desc",
         date: new Date()
       }
     ],
     bulletin: [
       {
         id: "preloaded-bulletin-excel",
-        name: "Boletim do Sistema Elétrico - Geração.xlsx",
+        name: "Arquivos do Boletim do Sistema Elétrico - Geração",
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         size: 3500000,
-        url: "https://mmegovbr-my.sharepoint.com/:f:/g/personal/ricardo_silveira_mme_gov_br/IgBaDcX03NWVTIJfK2c-1fI0AU_CnjBhKuoz5rrfjRsUg2M?e=l3PbWs",
+        url: "https://mmegovbr-my.sharepoint.com/:f:/g/personal/ricardo_silveira_mme_gov_br/IgBaDcX03NWVTIJfK2c-1fI0AU_CnjBhKuoz5rrfjRsUg2M?e=l3PbWs&SortField=Modified&SortDir=Desc",
         date: new Date()
-      },
+      }
+    ],
+    briefings: [
       {
-        id: "preloaded-bulletin-doc",
-        name: "Relatório Técnico - Boletim Geração.docx",
+        id: "briefing-01",
+        name: "Briefings Executivos - Geração.docx",
         type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        size: 1200000,
-        url: "https://mmegovbr-my.sharepoint.com/:f:/g/personal/ricardo_silveira_mme_gov_br/IgBaDcX03NWVTIJfK2c-1fI0AU_CnjBhKuoz5rrfjRsUg2M?e=l3PbWs",
+        size: 1100000,
+        url: "https://mmegovbr-my.sharepoint.com/:f:/g/personal/ricardo_silveira_mme_gov_br/IgDtzwi2f7z2Q5FdrCQJhZKVATkRkbCs5s7bt70LRNqHJ7Y?e=AfbA1s&SortField=Modified&SortDir=Desc",
         date: new Date()
       }
     ],
@@ -370,7 +291,7 @@ const App = () => {
         name: "Datas de Tendência.xlsx",
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         size: 2450000, // ~2.45 MB simulated size
-        url: "https://mmegovbr-my.sharepoint.com/:f:/g/personal/ricardo_silveira_mme_gov_br/IgD4Gm93r99xQYcqtLvznEcKAbbdRBdb_DFc1jVOWJ8uFEw?e=kbIgiL", 
+        url: "https://mmegovbr-my.sharepoint.com/:f:/g/personal/ricardo_silveira_mme_gov_br/IgD4Gm93r99xQYcqtLvznEcKAbbdRBdb_DFc1jVOWJ8uFEw?e=kbIgiL&SortField=Modified&SortDir=Desc", 
         date: new Date() 
       }
     ]
@@ -398,8 +319,13 @@ const App = () => {
       icon: <FileText className="w-5 h-5" /> 
     },
     { 
+      id: "briefings", 
+      label: "Briefings - Geração", 
+      icon: <FileText className="w-5 h-5" /> 
+    },
+    { 
       id: "site_dates", 
-      label: "Site MME - Datas de Tendência", 
+      label: "Site MME - Homologação Datas de Tendência pelo CMSE", 
       icon: <Globe className="w-5 h-5" /> 
     },
   ];
@@ -414,34 +340,62 @@ const App = () => {
             title="Monitoramento da Geração" 
             description="Acesse abaixo a planilha de monitoramento da geração (Excel ou Binário)."
             files={storedFiles.monitoring}
-            onPreview={setPreviewFile}
           />
         );
       case "pac_generation":
         return (
           <DocumentSection 
             title="Planilha PAC Geração" 
-            description="Consulte a Planilha PAC Geração para acompanhamento da equipe e do Ministério."
+            description="Baixe a Planilha PAC Geração com a data base mais atual."
             files={storedFiles.pac_generation}
-            onPreview={setPreviewFile}
           />
         );
       case "bulletin":
         return (
           <DocumentSection 
             title="Boletim do Sistema Elétrico" 
-            description="Área destinada aos arquivos do boletim em formato Excel e relatório técnico em Word."
+            description={
+              <>
+                Área destinada aos arquivos da geração para elaboração do boletim de monitoramento do sistema elétrico em formato Excel e Word.
+                <br />
+                <span className="text-base font-normal text-gray-500 mt-1 block">
+                    Obs: Clicando em baixar vão aparecer todos os arquivos disponíveis da geração para elaboração do boletim de monitoramento do sistema elétrico.
+                </span>
+              </>
+            }
             files={storedFiles.bulletin}
-            onPreview={setPreviewFile}
+          />
+        );
+      case "briefings":
+        return (
+          <DocumentSection 
+            title="Briefings - Geração" 
+            description={
+                <>
+                    Área destinada aos arquivos de briefings executivos em formato Word.
+                    <br />
+                    <span className="text-base font-normal text-gray-500 mt-1 block">
+                        Obs: Clicando em baixar vão aparecer todos os arquivos disponíveis de Briefings.
+                    </span>
+                </>
+            }
+            files={storedFiles.briefings}
           />
         );
       case "site_dates":
         return (
           <DocumentSection 
-            title="Datas de Tendência (Site MME)" 
-            description="Consulte a planilha de datas de tendência atualizada."
+            title="Homologação Datas de Tendência pelo CMSE (Site MME)" 
+            description={
+              <>
+                Área destinada aos arquivos excel que contêm as sugestões de datas de tendência de usinas de geração a serem homologadas nas reuniões do CMSE.
+                <br />
+                <span className="text-base font-normal text-gray-500 mt-1 block">
+                    Obs: Clicando em baixar vão aparecer todos os arquivos disponíveis de homologação de datas de tendência pelo CMSE.
+                </span>
+              </>
+            }
             files={storedFiles.site_dates}
-            onPreview={setPreviewFile}
           />
         );
       default:
@@ -547,14 +501,6 @@ const App = () => {
           className="fixed inset-0 bg-[#003399]/50 backdrop-blur-sm z-20 md:hidden transition-opacity"
           onClick={() => setMobileMenuOpen(false)}
         ></div>
-      )}
-
-      {/* Preview Modal */}
-      {previewFile && (
-        <PreviewModal 
-          file={previewFile} 
-          onClose={() => setPreviewFile(null)} 
-        />
       )}
     </div>
   );
