@@ -44,15 +44,15 @@ const DashboardView = () => {
 
   const reports = [
     {
-      title: "DPME - GAIA",
+      title: "DPME / GAIA",
       url: "https://app.powerbi.com/view?r=eyJrIjoiYWNhOGUyOWEtMGJhMC00MWFiLWFiNzQtMDIxZjFhZGFiYzY1IiwidCI6IjVlMzk3OGI5LTQ5NTAtNDM3Yy04N2I2LTQ5MmYxMjY4ZGVjOCJ9"
     },
     {
-      title: "Expansão, PAC e Capacidade Instalada",
+      title: "GERAÇÃO - COMPLETO",
       url: "https://app.powerbi.com/view?r=eyJrIjoiOGY0NzY5ZmQtNjQ4Zi00ZWZmLTllNTgtZGJkNGU2NjQ3M2M3IiwidCI6IjVlMzk3OGI5LTQ5NTAtNDM3Yy04N2I2LTQ5MmYxMjY4ZGVjOCJ9"
     },
     {
-      title: "Grandes Números do PAC - G e T",
+      title: "NÚMEROS PAC",
       url: "https://app.powerbi.com/view?r=eyJrIjoiMWU2ZTI4YWQtZjhkMS00ODNiLWE0MWMtYTkyMDAxMDk0NDM5IiwidCI6IjVlMzk3OGI5LTQ5NTAtNDM3Yy04N2I2LTQ5MmYxMjY4ZGVjOCJ9&pageName=185dfa9a7b011860d5d0"
     }
   ];
