@@ -356,10 +356,10 @@ const App = () => {
             title="Boletim do Sistema Elétrico" 
             description={
               <>
-                Área destinada aos arquivos da geração para elaboração do boletim de monitoramento do sistema elétrico em formato Excel e Word.
+                Obs: Área destinada aos arquivos da geração para elaboração do boletim de monitoramento do sistema elétrico
                 <br />
                 <span className="text-base font-normal text-gray-500 mt-1 block">
-                    Obs: Clicando em baixar vão aparecer todos os arquivos disponíveis da geração para elaboração do boletim de monitoramento do sistema elétrico.
+                    Obs: Clicando em baixar vão aparecer todos os arquivos disponíveis.
                 </span>
               </>
             }
