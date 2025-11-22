@@ -385,10 +385,10 @@ const App = () => {
       case "site_dates":
         return (
           <DocumentSection 
-            title="Homologação das Datas de Tendência pelo CMSE" 
+            title="Datas de Tendência CMSE" 
             description={
               <>
-                Área destinada aos arquivos que contêm as datas de tendência de usinas a serem homologadas pelo CMSE.
+                Área destinada aos arquivos com datas de tendência, visando homologação pelo CMSE.
                 <br />
                 <span className="text-base font-normal text-gray-500 mt-1 block">
                     Obs: Clicando em baixar vão aparecer todos os arquivos disponíveis.
@@ -479,7 +479,7 @@ const App = () => {
                       Secretaria Nacional de Energia Elétrica - Departamento de Políticas para o Mercado - Coordenação-Geral de Expansão da Geração e da Transmissão de Energia Elétrica
                     </span>
                     <h2 className="text-lg md:text-2xl font-extrabold text-gray-800 leading-tight">
-                        Portal de Painéis, Planilhas e Documentos da Expansão da Geração <span className="text-gray-400 mx-1 hidden md:inline">|</span> <span className="text-[#003399] block md:inline mt-1 md:mt-0">- CGGT/DPME/SNEE/MME</span>
+                        Portal de Painéis, Planilhas e Documentos <span className="text-gray-400 mx-1 hidden md:inline">|</span> <span className="text-[#003399] block md:inline mt-1 md:mt-0">- CGGT/DPME/SNEE/MME</span>
                     </h2>
                 </div>
 
