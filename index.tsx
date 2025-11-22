@@ -413,16 +413,15 @@ const App = () => {
         `}
       >
         {/* Logo Area */}
-        <div className="p-6 bg-[#002060] border-b border-blue-800">
-            <div className="flex items-center gap-3 mb-2">
-                <div className="bg-white rounded w-auto px-2 h-8 flex items-center justify-center shadow-md">
-                    {/* MME/DPME Box */}
-                    <div className="text-[#003399] font-black text-sm leading-none text-center tracking-tight">MME/DPME</div>
-                </div>
-                <div className="leading-tight">
-                    <h1 className="font-bold text-base text-[#FFCC00] tracking-wide">PORTAL CGGT</h1>
-                    <p className="text-[10px] text-blue-200 uppercase tracking-wider">Expansão da Geração</p>
-                </div>
+        <div className="p-6 bg-[#002060] border-b border-blue-800 flex flex-col items-start gap-1">
+            {/* MME/DPME Box */}
+            <div className="bg-white rounded w-auto px-2 py-0.5 h-6 flex items-center justify-center shadow-md mb-1">
+                <div className="text-[#003399] font-black text-xs leading-none text-center tracking-tight">MME/DPME</div>
+            </div>
+            {/* Portal Text */}
+            <div className="leading-tight">
+                <h1 className="font-bold text-3xl text-[#FFCC00] tracking-wide">PORTAL CGGT</h1>
+                <p className="text-[10px] text-blue-200 uppercase tracking-wider">Expansão da Geração</p>
             </div>
         </div>
 
@@ -480,7 +479,7 @@ const App = () => {
                       Secretaria Nacional de Energia Elétrica - Coordenação-Geral de Expansão da Geração e da Transmissão de Energia Elétrica
                     </span>
                     <h2 className="text-lg md:text-2xl font-extrabold text-gray-800 leading-tight">
-                        Portal de Painéis, Planilhas, Documentos e Relatório da Expansão <span className="text-gray-400 mx-1 hidden md:inline">|</span> <span className="text-[#003399] block md:inline mt-1 md:mt-0">- CGGT/DPME/MME</span>
+                        Portal de Painéis, Planilhas, Documentos e Relatório da Expansão <span className="text-gray-400 mx-1 hidden md:inline">|</span> <span className="text-[#003399] block md:inline mt-1 md:mt-0">- CGGT/DPME/SNEE/MME</span>
                     </h2>
                 </div>
 
