@@ -192,7 +192,7 @@ const DocumentSection = ({ title, description, files }: DocumentSectionProps) =>
                     <td className="p-4">
                       <div className="flex items-center gap-3">
                         <div className="p-2 rounded bg-white border border-gray-100 shadow-sm">
-                            {file.name.endsWith('doc') || file.name.endsWith('docx') ? (
+                            {file.name.endsWith('doc') || file.name.endsWith('docx') || file.type.includes('word') ? (
                             <FileText className="w-6 h-6 text-blue-600" />
                             ) : (
                             <FileSpreadsheet className="w-6 h-6 text-green-600" />
@@ -246,7 +246,7 @@ const App = () => {
       // Pre-loaded file for Monitoring
       {
         id: "preloaded-monitoring",
-        name: "Planilha de Monitoramento da Geração.xlsx",
+        name: "Planilha de Monitoramento da Geração",
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         size: 5200000, // ~5.2 MB simulated size
         url: "https://mmegovbr-my.sharepoint.com/:f:/g/personal/ricardo_silveira_mme_gov_br/IgCmqwPngAqSTJisFmQnGydfASajYjOCnCRJqTKe8U_a-yc?e=HE7Wo5&SortField=Modified&SortDir=Desc", 
@@ -257,7 +257,7 @@ const App = () => {
       // Pre-loaded file for PAC Generation
       {
         id: "preloaded-pac-generation",
-        name: "Planilha PAC Geração.xlsx",
+        name: "Planilha PAC Geração",
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         size: 4100000, // ~4.1 MB simulated size
         url: "https://mmegovbr-my.sharepoint.com/:f:/g/personal/ricardo_silveira_mme_gov_br/IgA3d8GnFnwBT72l3pj3c95wAYLfH6UO7-iiSWSL5vk41WA?e=SRdMcb&SortField=Modified&SortDir=Desc",
@@ -277,7 +277,7 @@ const App = () => {
     briefings: [
       {
         id: "briefing-01",
-        name: "Briefings Executivos - Geração.docx",
+        name: "Arquivos de Briefings de Usinas e Complexos",
         type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         size: 1100000,
         url: "https://mmegovbr-my.sharepoint.com/:f:/g/personal/ricardo_silveira_mme_gov_br/IgDtzwi2f7z2Q5FdrCQJhZKVATkRkbCs5s7bt70LRNqHJ7Y?e=AfbA1s&SortField=Modified&SortDir=Desc",
@@ -288,7 +288,7 @@ const App = () => {
       // Pre-loaded file placeholder for OneDrive
       {
         id: "preloaded-cmse",
-        name: "Datas de Tendência.xlsx",
+        name: "Arquivos de Datas de Tendência",
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         size: 2450000, // ~2.45 MB simulated size
         url: "https://mmegovbr-my.sharepoint.com/:f:/g/personal/ricardo_silveira_mme_gov_br/IgD4Gm93r99xQYcqtLvznEcKAbbdRBdb_DFc1jVOWJ8uFEw?e=kbIgiL&SortField=Modified&SortDir=Desc", 
