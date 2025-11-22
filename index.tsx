@@ -372,10 +372,10 @@ const App = () => {
             title="Briefings - Geração" 
             description={
                 <>
-                    Área destinada aos arquivos de briefings executivos em formato Word.
+                    Área destinada aos arquivos de briefings de usinas e Complexos de geração
                     <br />
                     <span className="text-base font-normal text-gray-500 mt-1 block">
-                        Obs: Clicando em baixar vão aparecer todos os arquivos disponíveis de Briefings.
+                        Obs: Clicando em baixar vão aparecer todos os arquivos disponíveis.
                     </span>
                 </>
             }
@@ -385,13 +385,13 @@ const App = () => {
       case "site_dates":
         return (
           <DocumentSection 
-            title="Homologação Datas de Tendência pelo CMSE (Site MME)" 
+            title="Homologação das Datas de Tendência pelo CMSE" 
             description={
               <>
-                Área destinada aos arquivos excel que contêm as sugestões de datas de tendência de usinas de geração a serem homologadas nas reuniões do CMSE.
+                Área destinada aos arquivos que contêm as datas de tendência de usinas a serem homologadas pelo CMSE.
                 <br />
                 <span className="text-base font-normal text-gray-500 mt-1 block">
-                    Obs: Clicando em baixar vão aparecer todos os arquivos disponíveis de homologação de datas de tendência pelo CMSE.
+                    Obs: Clicando em baixar vão aparecer todos os arquivos disponíveis.
                 </span>
               </>
             }
