@@ -52,7 +52,7 @@ const DashboardView = () => {
       url: "https://app.powerbi.com/view?r=eyJrIjoiOGY0NzY5ZmQtNjQ4Zi00ZWZmLTllNTgtZGJkNGU2NjQ3M2M3IiwidCI6IjVlMzk3OGI5LTQ5NTAtNDM3Yy04N2I2LTQ5MmYxMjY4ZGVjOCJ9"
     },
     {
-      title: "Grades Números do PAC - Geração e Transmissão",
+      title: "Grandes Números do PAC - G e T",
       url: "https://app.powerbi.com/view?r=eyJrIjoiMWU2ZTI4YWQtZjhkMS00ODNiLWE0MWMtYTkyMDAxMDk0NDM5IiwidCI6IjVlMzk3OGI5LTQ5NTAtNDM3Yy04N2I2LTQ5MmYxMjY4ZGVjOCJ9&pageName=185dfa9a7b011860d5d0"
     }
   ];
@@ -338,7 +338,7 @@ const App = () => {
         return (
           <DocumentSection 
             title="Monitoramento da Geração" 
-            description="Acesse abaixo a planilha de monitoramento da geração (Excel ou Binário)."
+            description="Baixe a Planilha de Monitoramento da Geração com a data base mais atual."
             files={storedFiles.monitoring}
           />
         );
@@ -480,7 +480,7 @@ const App = () => {
                       Secretaria Nacional de Energia Elétrica - Coordenação-Geral de Expansão da Geração e da Transmissão de Energia Elétrica
                     </span>
                     <h2 className="text-lg md:text-2xl font-extrabold text-gray-800 leading-tight">
-                        Portal de Painéis, Planilhas e Relatórios <span className="text-gray-400 mx-1 hidden md:inline">|</span> <span className="text-[#003399] block md:inline mt-1 md:mt-0">- CGGT/DPME/MME</span>
+                        Portal de Painéis, Planilhas, Documentos e Relatório da Expansão <span className="text-gray-400 mx-1 hidden md:inline">|</span> <span className="text-[#003399] block md:inline mt-1 md:mt-0">- CGGT/DPME/MME</span>
                     </h2>
                 </div>
 
