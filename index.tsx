@@ -356,7 +356,7 @@ const App = () => {
             title="Boletim do Sistema Elétrico" 
             description={
               <>
-                Obs: Área destinada aos arquivos da geração para elaboração do boletim de monitoramento do sistema elétrico
+                Área destinada aos arquivos para elaboração do boletim de monitoramento do sistema elétrico.
                 <br />
                 <span className="text-base font-normal text-gray-500 mt-1 block">
                     Obs: Clicando em baixar vão aparecer todos os arquivos disponíveis.
@@ -372,7 +372,7 @@ const App = () => {
             title="Briefings - Geração" 
             description={
                 <>
-                    Área destinada aos arquivos de briefings de usinas e Complexos de geração
+                    Área destinada aos arquivos de briefings de usinas e Complexos de geração.
                     <br />
                     <span className="text-base font-normal text-gray-500 mt-1 block">
                         Obs: Clicando em baixar vão aparecer todos os arquivos disponíveis.
@@ -479,7 +479,7 @@ const App = () => {
                       Secretaria Nacional de Energia Elétrica - Departamento de Políticas para o Mercado - Coordenação-Geral de Expansão da Geração e da Transmissão de Energia Elétrica
                     </span>
                     <h2 className="text-lg md:text-2xl font-extrabold text-gray-800 leading-tight">
-                        Portal de Painéis, Planilhas, Documentos e Relatórios da Expansão da Geração <span className="text-gray-400 mx-1 hidden md:inline">|</span> <span className="text-[#003399] block md:inline mt-1 md:mt-0">- CGGT/DPME/SNEE/MME</span>
+                        Portal de Painéis, Planilhas e Documentos da Expansão da Geração <span className="text-gray-400 mx-1 hidden md:inline">|</span> <span className="text-[#003399] block md:inline mt-1 md:mt-0">- CGGT/DPME/SNEE/MME</span>
                     </h2>
                 </div>
 
