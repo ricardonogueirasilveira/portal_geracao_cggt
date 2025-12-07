@@ -23,7 +23,7 @@ const MME_COLORS = {
   lightGray: "#f3f4f6",
 };
 
-type TabId = "dashboards" | "monitoring" | "pac_generation" | "bulletin" | "briefings" | "site_dates";
+type TabId = "dashboards" | "monitoring" | "pac_generation" | "bulletin" | "book_investments" | "briefings" | "site_dates";
 
 interface UploadedFile {
   id: string;
@@ -274,6 +274,16 @@ const App = () => {
         date: new Date()
       }
     ],
+    book_investments: [
+      {
+        id: "book-investments-01",
+        name: "Arquivos do Book de Investimentos",
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 
+        size: 1000000,
+        url: "https://mmegovbr-my.sharepoint.com/:f:/g/personal/ricardo_silveira_mme_gov_br/IgANDWvdUWrkR5MaQs-YviK3AeFraXi17CnSPzpvjOZhQ8c?e=NDhOuM&SortField=Modified&SortDir=Desc", 
+        date: new Date()
+      }
+    ],
     briefings: [
       {
         id: "briefing-01",
@@ -316,6 +326,11 @@ const App = () => {
     { 
       id: "bulletin", 
       label: "Boletim do Sistema Elétrico - Geração", 
+      icon: <FileText className="w-5 h-5" /> 
+    },
+    { 
+      id: "book_investments", 
+      label: "Book de Investimentos", 
       icon: <FileText className="w-5 h-5" /> 
     },
     { 
@@ -364,6 +379,22 @@ const App = () => {
               </>
             }
             files={storedFiles.bulletin}
+          />
+        );
+      case "book_investments":
+        return (
+          <DocumentSection 
+            title="Book de Investimentos" 
+            description={
+              <>
+                Área destinada aos arquivos do Book de Investimentos.
+                <br />
+                <span className="text-base font-normal text-gray-500 mt-1 block">
+                    Obs: Clicando em baixar vão aparecer todos os arquivos disponíveis.
+                </span>
+              </>
+            }
+            files={storedFiles.book_investments}
           />
         );
       case "briefings":
